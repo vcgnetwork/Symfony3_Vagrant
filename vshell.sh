@@ -160,6 +160,7 @@ EOF
 )
 echo "${SETUP}" > setup.sh
 chmod +x setup.sh
+sudo chmod vagrant setup.sh
 
 if [ -f /vagrant/"${PROJECTNAME}"/composer.lock ]
 then

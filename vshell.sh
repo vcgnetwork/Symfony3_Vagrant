@@ -117,8 +117,8 @@ echo '###########################'
 echo '#### SYMFONY INSTALLER ####'
 echo '###########################'
 echo ' '
-SFCHECK="symfony"
-if [ -f "${SFCHECK}" ]
+CHECK="symfony"
+if [ -f "${CHECK}" ]
 then
     echo ' '
     echo '### Symfony Installed - Moving On ... ###'
@@ -131,8 +131,6 @@ else
     sudo chown -Rf vagrant:vagrant symfony
     chmod +x symfony
 fi
-
-
 
 echo ' '
 echo '###########################'
@@ -153,20 +151,31 @@ sudo mv /var/www/"${PROJECTNAME}" /var/www/"${PROJECTNAME}"_old
 sudo ln -s /vagrant/"${PROJECTNAME}" /var/www/"${PROJECTNAME}"
 
 # setup.sh should be the default symfony command to load the right versions and stuff.
-SETUPSH=$(cat <<EOF
-echo 'Setting up Symfony3'
+SETUP=$(cat <<EOF
+#!/bin/bash
 cd /vagrant
 rm -Rf website/
-echo ' '
-echo '### PLEASE WAIT ###'
-echo ' '
-~/symfony new website 3.1
+symfony new website 3.1
 EOF
 )
-echo "${SETUPSH}" > setup.sh
+echo "${SETUP}" > setup.sh
 chmod +x setup.sh
 
-
+if [ -f /vagrant/"${PROJECTNAME}"/composer.lock ]
+then
+    echo ' '
+    echo '#######################'
+    echo '## SYMFONY INSTALLED ##'
+    echo '#######################'
+    echo ' '
+else
+    echo ' '
+    echo '###################'
+    echo '## SETUP SYMFONY ##'
+    echo '###################'
+    echo ' '
+    source setup.sh
+fi
 
 echo ' '
 echo '###########################'
